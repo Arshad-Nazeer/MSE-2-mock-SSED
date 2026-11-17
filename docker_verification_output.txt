@@ -1,0 +1,85 @@
+================================================================================
+DOCKER STATUS AND HEALTH VERIFICATION REPORT
+Generated at: 2026-11-18 02:59:30
+================================================================================
+
+--------------------------------------------------------------------------------
+1. COMMAND: docker compose ps
+--------------------------------------------------------------------------------
+NAME                     IMAGE                                COMMAND                  SERVICE    CREATED          STATUS                    PORTS
+mock_devops-api-1        campushub-api:latest                 "docker-entrypoint.s…"   api        13 minutes ago   Up 12 minutes (healthy)   3000/tcp
+mock_devops-db-1         postgres:16-alpine                   "docker-entrypoint.s…"   db         13 minutes ago   Up 13 minutes (healthy)   5432/tcp
+mock_devops-frontend-1   campushub-frontend:latest            "/docker-entrypoint.…"   frontend   13 minutes ago   Up 13 minutes (healthy)   8080/tcp
+mock_devops-gateway-1    nginxinc/nginx-unprivileged:alpine   "/docker-entrypoint.…"   gateway    13 minutes ago   Up 12 minutes (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp
+mock_devops-mailhog-1    mailhog/mailhog:latest               "MailHog"                mailhog    13 minutes ago   Up 13 minutes             127.0.0.1:8025->8025/tcp
+mock_devops-minio-1      minio:latest                         "/usr/bin/docker-ent…"   minio      13 minutes ago   Up 13 minutes (healthy)   127.0.0.1:9001->9001/tcp
+mock_devops-rabbitmq-1   rabbitmq:3.13-management-alpine      "docker-entrypoint.s…"   rabbitmq   13 minutes ago   Up 13 minutes (healthy)   127.0.0.1:15672->15672/tcp
+mock_devops-redis-1      redis:7-alpine                       "docker-entrypoint.s…"   redis      13 minutes ago   Up 13 minutes (healthy)   6379/tcp
+mock_devops-worker-1     campushub-api:latest                 "docker-entrypoint.s…"   worker     13 minutes ago   Up 12 minutes (healthy)   3000/tcp
+
+
+--------------------------------------------------------------------------------
+2. COMMAND: docker ps
+--------------------------------------------------------------------------------
+CONTAINER ID   IMAGE                                COMMAND                  CREATED          STATUS                    PORTS                                         NAMES
+3127dba87f0f   nginxinc/nginx-unprivileged:alpine   "/docker-entrypoint.…"   13 minutes ago   Up 12 minutes (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp   mock_devops-gateway-1
+99497395cfd4   campushub-api:latest                 "docker-entrypoint.s…"   13 minutes ago   Up 12 minutes (healthy)   3000/tcp                                      mock_devops-worker-1
+cc48e9fa273e   campushub-api:latest                 "docker-entrypoint.s…"   13 minutes ago   Up 13 minutes (healthy)   3000/tcp                                      mock_devops-api-1
+02f4c0ab87c6   postgres:16-alpine                   "docker-entrypoint.s…"   13 minutes ago   Up 13 minutes (healthy)   5432/tcp                                      mock_devops-db-1
+19e8ac8ed646   rabbitmq:3.13-management-alpine      "docker-entrypoint.s…"   13 minutes ago   Up 13 minutes (healthy)   127.0.0.1:15672->15672/tcp                    mock_devops-rabbitmq-1
+e7d7228e31f5   redis:7-alpine                       "docker-entrypoint.s…"   13 minutes ago   Up 13 minutes (healthy)   6379/tcp                                      mock_devops-redis-1
+6c9e8d332cdf   minio:latest                         "/usr/bin/docker-ent…"   13 minutes ago   Up 13 minutes (healthy)   127.0.0.1:9001->9001/tcp                      mock_devops-minio-1
+61be06b4a6cb   mailhog/mailhog:latest               "MailHog"                13 minutes ago   Up 13 minutes             127.0.0.1:8025->8025/tcp                      mock_devops-mailhog-1
+6a6d198bac85   campushub-frontend:latest            "/docker-entrypoint.…"   13 minutes ago   Up 13 minutes (healthy)   8080/tcp                                      mock_devops-frontend-1
+
+
+--------------------------------------------------------------------------------
+3. COMMAND: docker images
+--------------------------------------------------------------------------------
+IMAGE                                    ID             DISK USAGE   CONTENT SIZE   EXTRA
+alpine:latest                            f59abe656b69         13MB         3.94MB        
+arshadnazeer/campushub-api:latest        073c7efa8638        227MB         52.3MB   U    
+arshadnazeer/campushub-frontend:latest   ed6b9524bc60       91.3MB         25.9MB   U    
+campushub-api:latest                     073c7efa8638        227MB         52.3MB   U    
+campushub-frontend:latest                ed6b9524bc60       91.3MB         25.9MB   U    
+elestio/minio:latest                     25348a257f1e        241MB         62.3MB   U    
+hello-world:latest                       1e4c05b897a7       25.9kB         9.49kB   U    
+mailhog/mailhog:latest                   8d76a3d4ffa3        572MB          146MB   U    
+minio/minio:latest                       25348a257f1e        241MB         62.3MB   U    
+minio:latest                             25348a257f1e        241MB         62.3MB   U    
+nginx:latest                             165ddde8751e        243MB         66.8MB        
+nginxinc/nginx-unprivileged:alpine       b5047b9b7684       91.1MB         25.9MB   U    
+node:20-alpine                           fb4cd12c85ee        194MB         48.8MB        
+postgres:16-alpine                       81e77a483348        420MB          117MB   U    
+rabbitmq:3.13-management-alpine          606d8c0d6b3c        277MB         87.7MB   U    
+redis:7-alpine                           7f7d30b7fdd0       58.5MB         16.9MB   U    
+
+
+--------------------------------------------------------------------------------
+4. COMMAND: Individual Container Health Check (docker inspect)
+--------------------------------------------------------------------------------
+mock_devops-gateway-1    : healthy
+mock_devops-worker-1     : healthy
+mock_devops-api-1        : healthy
+mock_devops-db-1         : healthy
+mock_devops-rabbitmq-1   : healthy
+mock_devops-redis-1      : healthy
+mock_devops-minio-1      : healthy
+mock_devops-mailhog-1    : running (no healthcheck configured)
+mock_devops-frontend-1   : healthy
+
+
+--------------------------------------------------------------------------------
+5. COMMAND: docker compose logs --tail 10
+--------------------------------------------------------------------------------
+api-1       | migration and seed complete
+api-1       | api listening on 3000
+worker-1    | worker waiting for jobs
+frontend-1  | 127.0.0.1 - - [17/Nov/2026:21:29:18 +0000] "GET / HTTP/1.1" 200 297 "-" "Wget" "-"
+gateway-1   | 127.0.0.1 - - [17/Nov/2026:21:29:15 +0000] "GET / HTTP/1.1" 200 297 "-" "Wget" "-"
+db-1        | 2026-11-17 21:15:54.431 UTC [1] LOG:  database system is ready to accept connections
+redis-1     | 1:M 17 Nov 2026 21:15:55.279 * Ready to accept connections tcp
+rabbitmq-1  | 2026-11-17 21:16:17.969868+00:00 [info] <0.898.0> connection <0.898.0> (172.19.0.8:46282 -> 172.19.0.4:5672): user 'campus' authenticated and granted access to vhost '/'
+minio-1     | API: http://172.19.0.6:9000  http://127.0.0.1:9000 
+mailhog-1   | [APIv1] KEEPALIVE /api/v1/events
+================================================================================
